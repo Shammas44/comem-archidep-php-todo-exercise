@@ -8,8 +8,8 @@
 define('BASE_URL', '/comem-archidep-php-todo-exercise/');
 
 // Database connection parameters.
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
+define('DB_USER', 'timo');
+define('DB_PASS', 'timo');
 define('DB_NAME', 'todolist');
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
@@ -82,7 +82,7 @@ if (isset($_POST['action'])) {
 /**
  * Select all tasks from the database.
  */
-$selectQuery = 'select * from todo'; // IMPLEMENT ME
+$selectQuery = 'select * from todo ORDER BY created_at DESC'; // IMPLEMENT ME
 $items = $db->query($selectQuery);
 ?>
 
