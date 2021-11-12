@@ -5,14 +5,14 @@
 // "http://localhost:8888/comem-archidep-php-todo-exercise/", then BASE_URL
 // should be "/comem-archidep-php-todo-exercise/". If you are accessing the
 // application at "http://localhost:8888", then BASE_URL should be "/".
-define('BASE_URL', '/comem-archidep-php-todo-exercise/');
+define('BASE_URL', getenv('TODOLIST_BASE_URL')? getenv('TODOLIST_BASE_URL'):'/');
 
 // Database connection parameters.
-define('DB_USER', 'timo');
-define('DB_PASS', 'timo');
-define('DB_NAME', 'todolist');
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');
+define('DB_USER', getenv('TODOLIST_DB_USER')? getenv('TODOLIST_DB_USER'):'todolist');
+define('DB_PASS', getenv('TODOLIST_DB_PASS'));
+define('DB_NAME', getenv('TODOLIST_DB_NAME')? getenv('TODOLIST_DB_NAME'):'todo');
+define('DB_HOST', getenv('TODOLIST_DB_HOST')? getenv('TODOLIST_BD_HOST'):'localhost');
+define('DB_PORT', getenv('TODOLIST_DB_PORT')? getenv('TODOLIST_DB_PORT'):3306);
 
 
 $db = new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASS);
@@ -49,7 +49,7 @@ if (isset($_POST['action'])) {
         $currentState->execute();
         $currentState = $currentState->fetch(PDO::FETCH_ASSOC); 
         $newState = $currentState['done'] == 1 ? 0:1;
-        $updateQuery = 'UPDATE todo SET done = '. $newState .' WHERE id = '. $id;  ; 
+        $updateQuery = 'UPDATE todo SET done = '. $newState .' WHERE id = '. $id;   
         if(!$db->query($updateQuery)) {
           die(print_r($db->errorInfo(), true));
         }
@@ -65,7 +65,7 @@ if (isset($_POST['action'])) {
 
       $id = $_POST['id'];
       if(is_numeric($id)) {
-        $deleteQuery = 'delete from todo where id like '. $id;
+        $deleteQuery = ''; // IMPLEMENT ME
         if(!$db->query($deleteQuery)) {
           die(print_r($db->errorInfo(), true));
         }
@@ -82,7 +82,7 @@ if (isset($_POST['action'])) {
 /**
  * Select all tasks from the database.
  */
-$selectQuery = 'select * from todo ORDER BY created_at DESC'; // IMPLEMENT ME
+$selectQuery = 'select * from todo'; // IMPLEMENT ME
 $items = $db->query($selectQuery);
 ?>
 
