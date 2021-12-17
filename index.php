@@ -1,77 +1,77 @@
 <?php
 
-// The base path under which the application is exposed. For example, if you are
+// the base path under which the application is exposed. for example, if you are
 // accessing the application at
-// "http://localhost:8888/comem-archidep-php-todo-exercise/", then BASE_URL
-// should be "/comem-archidep-php-todo-exercise/". If you are accessing the
-// application at "http://localhost:8888", then BASE_URL should be "/".
-define('BASE_URL', getenv('TODOLIST_BASE_URL')?:'/');
+// "http://localhost:8888/comem-archidep-php-todo-exercise/", then base_url
+// should be "/comem-archidep-php-todo-exercise/". if you are accessing the
+// application at "http://localhost:8888", then base_url should be "/".
+define('base_url', getenv('todolist_base_url')?:'/');
 
-// Database connection parameters.
-define('DB_USER', getenv('TODOLIST_DB_USER')?: 'todolist');
-define('DB_PASS', getenv('TODOLIST_DB_PASS'));
-define('DB_NAME', getenv('TODOLIST_DB_NAME')?:'todo');
-define('DB_HOST', getenv('TODOLIST_DB_HOST')?:'localhost');
-define('DB_PORT', getenv('TODOLIST_DB_PORT')?: 3306);
+// database connection parameters.
+define('db_user', getenv('todolist_db_user')?: 'todolist');
+define('db_pass', getenv('todolist_db_pass'));
+define('db_name', getenv('todolist_db_name')?:'todolist');
+define('db_host', getenv('todolist_db_host')?:'localhost');
+define('db_port', getenv('todolist_db_port')?: 3306);
 
 
-$db = new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASS);
+$db = new pdo('mysql:host='.db_host.';port='.db_port.';dbname='.db_name, db_user, db_pass);
 $items = array();
 
-if (isset($_POST['action'])) {
-  switch($_POST['action']) {
+if (isset($_post['action'])) {
+  switch($_post['action']) {
 
     /**
-     * Insert a new task into the database, then redirect to the base URL.
+     * insert a new task into the database, then redirect to the base url.
      */
     case 'new':
 
-      $title = $_POST['title'];
+      $title = $_post['title'];
       if ($title && $title !== '') {
-        $insertQuery = 'INSERT INTO todo VALUES(NULL, \''.$title.'\', FALSE, CURRENT_TIMESTAMP)';
-        if (!$db->query($insertQuery)) {
-          die(print_r($db->errorInfo(), true));
+        $insertquery = 'insert into todo values(null, \''.$title.'\', false, current_timestamp)';
+        if (!$db->query($insertquery)) {
+          die(print_r($db->errorinfo(), true));
         }
       }
 
-      header('Location: '.BASE_URL);
+      header('location: '.base_url);
       die();
 
     /**
-     * Toggle a task (i.e. if it is done, undo it; if it is not done, mark it as done),
-     * then redirect to the base URL.
+     * toggle a task (i.e. if it is done, undo it; if it is not done, mark it as done),
+     * then redirect to the base url.
      */
     case 'toggle':
 
-      $id = $_POST['id'];
+      $id = $_post['id'];
       if(is_numeric($id)) {
-        $currentState = $db->query('SELECT done from todo WHERE id = '. $id);
-        $currentState->execute();
-        $currentState = $currentState->fetch(PDO::FETCH_ASSOC); 
-        $newState = $currentState['done'] == 1 ? 0:1;
-        $updateQuery = 'UPDATE todo SET done = '. $newState .' WHERE id = '. $id;   
-        if(!$db->query($updateQuery)) {
-          die(print_r($db->errorInfo(), true));
+        $currentstate = $db->query('select done from todo where id = '. $id);
+        $currentstate->execute();
+        $currentstate = $currentstate->fetch(pdo::fetch_assoc); 
+        $newstate = $currentstate['done'] == 1 ? 0:1;
+        $updatequery = 'update todo set done = '. $newstate .' where id = '. $id;   
+        if(!$db->query($updatequery)) {
+          die(print_r($db->errorinfo(), true));
         }
       }
 
-      header('Location: '.BASE_URL);
+      header('location: '.base_url);
       die();
 
     /**
-     * Delete a task, then redirect to the base URL.
+     * delete a task, then redirect to the base url.
      */
     case 'delete':
 
-      $id = $_POST['id'];
+      $id = $_post['id'];
       if(is_numeric($id)) {
-        $deleteQuery = ''; // IMPLEMENT ME
-        if(!$db->query($deleteQuery)) {
-          die(print_r($db->errorInfo(), true));
+        $deletequery = 'delete from todo where id like '. $id; // implement me
+        if(!$db->query($deletequery)) {
+          die(print_r($db->errorinfo(), true));
         }
       }
 
-      header('Location: '.BASE_URL);
+      header('location: '.base_url);
       die();
 
     default:
@@ -80,20 +80,20 @@ if (isset($_POST['action'])) {
 }
 
 /**
- * Select all tasks from the database.
+ * select all tasks from the database.
  */
-$selectQuery = 'select * from todo'; // IMPLEMENT ME
-$items = $db->query($selectQuery);
+$selectquery = 'select * from todo'; // implement me
+$items = $db->query($selectquery);
 ?>
 
 <html>
   <head>
-    <title>TodoList</title>
+    <title>todolist</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-mcw98/sfnge8fjt3gxweongsv7zt27nxfoaoapmym81iuxopkfojwj8erdknlpmo" crossorigin="anonymous">
 
-    <!-- Custom CSS -->
+    <!-- custom css -->
     <style>
       button {
         cursor: pointer;
@@ -105,12 +105,12 @@ $items = $db->query($selectQuery);
   </head>
   <body>
 
-    <!-- Navbar -->
+    <!-- navbar -->
     <header>
       <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
           <a href="#" class="navbar-brand d-flex align-items-center">
-            <strong>TodoList</strong>
+            <strong>todolist</strong>
           </a>
         </div>
       </div>
@@ -118,45 +118,45 @@ $items = $db->query($selectQuery);
 
     <main role="main" class='offset-3 col-6 mt-3'>
 
-      <!-- Todo item creation form -->
-      <form action='<?= BASE_URL ?>' method='post' class='form-inline justify-content-center'>
+      <!-- todo item creation form -->
+      <form action='<?= base_url ?>' method='post' class='form-inline justify-content-center'>
         <input type='hidden' name='action' value='new' />
 
         <div class='form-group'>
-          <label for='task-title' class='sr-only'>Title</label>
-          <input id='task-title' class='form-control' name='title' type='text' placeholder='Task Title'>
+          <label for='task-title' class='sr-only'>title</label>
+          <input id='task-title' class='form-control' name='title' type='text' placeholder='task title'>
         </div>
 
-        <button type='submit' class='btn btn-primary ml-2'>Add</button>
+        <button type='submit' class='btn btn-primary ml-2'>add</button>
       </form>
 
-      <!-- Todo list -->
+      <!-- todo list -->
       <div class='list-group mt-3'>
 
-        <!-- Todo items -->
+        <!-- todo items -->
         <?php foreach($items as $item): ?>
           <div class='list-group-item d-flex justify-content-between align-items-center<?php if($item['done']): ?> list-group-item-success<?php else: ?> list-group-item-warning<?php endif;?>'>
 
             <div class='title'><?= $item['title'] ?></div>
 
-            <!-- Todo item controls -->
-            <form action='<?= BASE_URL ?>' method='post'>
+            <!-- todo item controls -->
+            <form action='<?= base_url ?>' method='post'>
               <input type='hidden' name='id' value='<?= $item['id'] ?>' />
 
               <div class='btn-group btn-group-sm'>
 
-                <!-- Todo item toggle button -->
+                <!-- todo item toggle button -->
                 <button type='submit' name='action' value='toggle' class='btn btn-primary'>
                   <?php if ($item['done']) { ?>
-                    Undo
+                    undo
                   <?php } else { ?>
-                    Done
+                    done
                   <?php } ?>
                 </button>
 
-                <!-- Todo item delete button -->
+                <!-- todo item delete button -->
                 <button type='submit' name='action' value='delete' class='btn btn-danger'>
-                  X
+                  x
                 </button>
 
               </div>
@@ -169,10 +169,10 @@ $items = $db->query($selectQuery);
 
     </main>
 
-    <!-- Bootstrap JavaScript & dependencies -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- bootstrap javascript & dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/x+965dzo0rt7abk41jstqiaqvgrvzpbzo5smxkp4yfrvh+8abtte1pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-zmp7rvo3miykv+2+9j3uj46jbk0wlauadn689acwoqbbjisnjak/l8wvcwpipm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-chfqqxuzucnjsk3+mxmpniye6zbwh2imqe241ryiqjxymiz6ow/jmzq5stweulty" crossorigin="anonymous"></script>
 
   </body>
 </html>
