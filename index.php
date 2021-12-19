@@ -4,14 +4,14 @@
 // "http://localhost:8888/comem-archidep-php-todo-exercise/", then base_url
 // should be "/comem-archidep-php-todo-exercise/". if you are accessing the
 // application at "http://localhost:8888", then base_url should be "/".
-define('base_url', getenv('todolist_base_url')?:'/');
+define('base_url', getenv('TODOLIST_BASE_URL')?:'/');
 
 // database connection parameters.
-define('db_user', getenv('todolist_db_user')?: 'todolist');
-define('db_pass', getenv('todolist_db_pass'));
-define('db_name', getenv('todolist_db_name')?:'todolist');
-define('db_host', getenv('todolist_db_host')?:'localhost');
-define('db_port', getenv('todolist_db_port')?: 3306);
+define('db_user', getenv('TODOLIST_DB_USER')?: 'todolist');
+define('db_pass', getenv('TODOLIST_DB_PASS'));
+define('db_name', getenv('TODOLIST_DB_NAME')?:'todolist');
+define('db_host', getenv('TODOLIST_DB_HOST')?:'localhost');
+define('db_port', getenv('TODOLIST_DB_PORT')?: 3306);
 
 
 $db = new pdo('mysql:host='.db_host.';port='.db_port.';dbname='.db_name, db_user, db_pass);
