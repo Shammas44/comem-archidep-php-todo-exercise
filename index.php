@@ -1,5 +1,4 @@
 <?php
-// Commentaire de test
 // the base path under which the application is exposed. for example, if you are
 // accessing the application at
 // "http://localhost:8888/comem-archidep-php-todo-exercise/", then base_url
